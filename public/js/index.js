@@ -6,7 +6,6 @@ function makeChatMessage (nickName, message) {
     return msgTemplate;
 }
 
-var SOCKET_IO_CONNECT_URL = 'http://localhost:3000';
 var SocketRoutes = {
     _socket: null,
     init: function (socket) {
@@ -50,7 +49,7 @@ var SocketRoutes = {
 };
 
 $(function () {
-    SocketRoutes.init(io.connect(SOCKET_IO_CONNECT_URL));
+    SocketRoutes.init(io.connect());
 
     $('#frm').submit(function (e) {
         e.preventDefault();

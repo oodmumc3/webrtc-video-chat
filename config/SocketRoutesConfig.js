@@ -26,9 +26,31 @@ exports.init = clientSocket => {
     clientSocket.on('sendMessage', function (data) {
         onSendMessage(clientSocket, data.message);
     });
+
+    clientSocket.on('makeOffer', function (data) {
+        onMakeOffer(clientSocket, data.offer);
+    });
+
+    clientSocket.on('makeAnswer', function (data) {
+        onAnswerMade(clientSocket, data.answer);
+    });
 };
 
-function onSendMessage(socket, message) {
+function onAnswerMade(socket, answer) {
+    if (!_CLIENTS[socket.id]) { return; }
+
+    var clientData = _CLIENTS[socket.id];
+    socket.broadcast.to(clientData.room).emit('answerMade', { answer });
+}
+
+function onMakeOffer (socket, offer) {
+    if (!_CLIENTS[socket.id]) { return; }
+
+    var clientData = _CLIENTS[socket.id];
+    socket.broadcast.to(clientData.room).emit('offerMade', { offer });
+}
+
+function onSendMessage (socket, message) {
     if (!_CLIENTS[socket.id]) { return; }
 
     var clientData = _CLIENTS[socket.id];

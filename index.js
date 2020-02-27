@@ -14,7 +14,7 @@ app.get('/', (request, response) => {
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(3000, () => {
+httpServer.listen(process.env.PORT || 3000, () => {
     console.log('http server is listen!');
 });
 

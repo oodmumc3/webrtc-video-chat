@@ -4,6 +4,7 @@ window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSess
 
 var isAlreadyCalling = false;
 var peerConnection = new RTCPeerConnection({
+    iceTransportPolicy: 'relay',
     iceServers: [
         {
             'urls': 'stun:stun.l.google.com:19302??transport=tcp'

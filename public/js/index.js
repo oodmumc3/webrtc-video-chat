@@ -14,6 +14,16 @@ var peerConnection = new RTCPeerConnection({
             ],
             "username": "YzYNCouZM1mhqhmseWk6",
             "credential": "YzYNCouZM1mhqhmseWk6"
+        },
+        {
+            urls: ['turn:turn.bistri.com:80'],
+            credential: 'homeo',
+            username: 'homeo'
+        },
+        {
+            urls: ['turn:turn.anyfirewall.com:443?transport=tcp'],
+            credential: 'webrtc',
+            username: 'webrtc'
         }
     ]
 });

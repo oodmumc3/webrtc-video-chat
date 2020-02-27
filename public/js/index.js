@@ -9,9 +9,9 @@ var peerConnection = new RTCPeerConnection({
             'urls': 'stun:stun.l.google.com:19302?transport=tcp'
         },
         {
-            urls: ['turn:turn.anyfirewall.com:443?transport=tcp'],
-            credential: 'webrtc',
-            username: 'webrtc'
+            urls: ['turn:turn.bistri.com:80'],
+            credential: 'homeo',
+            username: 'homeo'
         }
     ]
 });

@@ -4,10 +4,16 @@ window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSess
 
 var isAlreadyCalling = false;
 var peerConnection = new RTCPeerConnection({
-    iceTransportPolicy: 'relay',
     iceServers: [
         {
-            'urls': 'stun:stun.l.google.com:19302??transport=tcp'
+            'urls': 'stun:stun.l.google.com:19302?transport=tcp'
+        },
+        {
+            "urls": [
+                "turn:13.250.13.83:3478?transport=udp"
+            ],
+            "username": "YzYNCouZM1mhqhmseWk6",
+            "credential": "YzYNCouZM1mhqhmseWk6"
         }
     ]
 });

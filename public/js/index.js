@@ -23,6 +23,7 @@ function makeChatMessage (nickName, message) {
 
 var SocketRoutes = {
     _socket: null,
+    _isAlreadyCalling: false,
     init: function (socket) {
         this._socket = socket;
         this._onRoutes();
@@ -60,9 +61,9 @@ var SocketRoutes = {
         console.log('###### _onAnswerMade :: ', data);
         peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
             .then(function () {
-                if (!isAlreadyCalling) {
+                if (!self._isAlreadyCalling) {
                     self._callUser();
-                    isAlreadyCalling = true;
+                    self._isAlreadyCalling = true;
                 }
             })
             .catch(function (err) {

@@ -9,18 +9,6 @@ var peerConnection = new RTCPeerConnection({
             'urls': 'stun:stun.l.google.com:19302?transport=tcp'
         },
         {
-            "urls": [
-                "turn:13.250.13.83:3478?transport=udp"
-            ],
-            "username": "YzYNCouZM1mhqhmseWk6",
-            "credential": "YzYNCouZM1mhqhmseWk6"
-        },
-        {
-            urls: ['turn:turn.bistri.com:80'],
-            credential: 'homeo',
-            username: 'homeo'
-        },
-        {
             urls: ['turn:turn.anyfirewall.com:443?transport=tcp'],
             credential: 'webrtc',
             username: 'webrtc'

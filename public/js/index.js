@@ -2,7 +2,6 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || 
 window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
 window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription;
 
-var isAlreadyCalling = false;
 var peerConnection = new RTCPeerConnection({
     iceServers: [
         {
@@ -18,7 +17,6 @@ var peerConnection = new RTCPeerConnection({
 
 
 peerConnection.onaddstream = function (obj) {
-    console.log('#########3 onaddstream :: ', obj);
     var $remoteVideo = $('#remoteVideo');
     $remoteVideo.get(0).srcObject = obj.stream;
 };
@@ -68,7 +66,6 @@ var SocketRoutes = {
     },
     _onAnswerMade: function (data) {
         var self = this;
-        console.log('###### _onAnswerMade :: ', data);
         peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer))
             .then(function () {
                 if (!self._isAlreadyCalling) {

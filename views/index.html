@@ -74,6 +74,9 @@
 
   <div class="row" style="background-color:#e9ecef;padding:20px;display:none" id="infoRow" >
     <h2>Hello <span id="loggedUserName"></span>, Welcome Room <span id="roomName"></span></h2>
+    <button disabled type="button" class="btn btn-primary">
+      채팅 인원수 <span class="badge badge-light" id="currentChatUserSize">0</span>
+    </button>
   </div>
   <div class="row" id="conferenceRow" style="display:none;backgorund-color:#dedefe; margin-top:20px;" >
     <div style="padding:10px !important; ">
@@ -82,7 +85,7 @@
     </div>
     <div id="other" style="padding: 10px">
       <video id="remoteVideo" autoplay muted playsinline controls style="height:240px;"></video>
-      <p class="showUserName">ME</p>
+      <p class="showUserName" id="otherUser">-</p>
     </div>
   </div>
 

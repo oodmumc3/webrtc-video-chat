@@ -53,6 +53,9 @@ var SocketRoutes = {
         var chatMessage =
             makeChatMessage('SYSTEM', data.nickName + '님이 퇴장하셨습니다.');
         $("#chatArea").append(chatMessage);
+
+        $('#currentChatUserSize').text(data.chatRoomUserSize);
+
         var remoteVideo = $('#remoteVideo').get(0);
         remoteVideo.pause();
         remoteVideo.currentTime = 0;
@@ -61,8 +64,13 @@ var SocketRoutes = {
         var chatMessage =
             makeChatMessage('SYSTEM', data.nickName + '님이 입장하셨습니다.');
         $("#chatArea").append(chatMessage);
+        $('#currentChatUserSize').text(data.chatRoomUserSize);
 
-        this._callUser();
+        // 두명의 인원만 화상채팅을 지원하므로 2명일때만 호출한다.
+        if (data.userSize === 2) {
+            $('#otherUser').text(data.nickName);
+            this._callUser();
+        }
     },
     _onAnswerMade: function (data) {
         var self = this;
@@ -124,6 +132,10 @@ var SocketRoutes = {
 
         $('#loggedUserName').text(data.nickName);
         $('#roomName').text(data.room);
+        $('#currentChatUserSize').text(data.chatRoomUserSize);
+        if (data.otherNickName) {
+            $('#otherUser').text(data.otherNickName);
+        }
     },
     emit: function (name, data) {
         this._socket.emit(name, data);

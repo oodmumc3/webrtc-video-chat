@@ -9,7 +9,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
           integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
           crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="/js/index.js"></script>
 
   <style type="text/css">
@@ -74,10 +74,17 @@
 
   <div class="row" style="background-color:#e9ecef;padding:20px;display:none" id="infoRow" >
     <h2>Hello <span id="loggedUserName"></span>, Welcome Room <span id="roomName"></span></h2>
-    <button disabled type="button" class="btn btn-primary">
-      채팅 인원수 <span class="badge badge-light" id="currentChatUserSize">0</span>
-    </button>
   </div>
+
+  <div class="row" id="userListRow" style="display: none;">
+    <ul class="list-group" id="userList">
+      <li class="list-group-item d-flex justify-content-between align-items-center active">
+        참가 인원 리스트 &nbsp;
+        <span class="badge badge-pill badge-light" id="currentChatUserSize"></span>
+      </li>
+    </ul>
+  </div>
+
   <div class="row" id="conferenceRow" style="display:none;backgorund-color:#dedefe; margin-top:20px;" >
     <div style="padding:10px !important; ">
       <video id="localVideo" autoplay muted playsinline controls style="height:240px;"></video>

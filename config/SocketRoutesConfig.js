@@ -77,7 +77,7 @@ function onDisconnect (socket) {
     socket.leave(roomId);
     socket.broadcast.to(roomId).emit('userLeft', {
         nickName: clientData.nickName,
-        chatRoomUserSize: room.length
+        chatRoomAllUsers: room.map(r => r.nickName)
     });
 }
 
@@ -89,13 +89,13 @@ function onLogin(socket, nickName, room) {
     _ROOMS[room].push({ nickName, socketId: socket.id });
     socket.join(room);
 
-    // 현재 채팅방 인원수 용도로 사용한다.
+    // 현재 채팅방 인원수 및 채팅 유저 리스트 출력 용도로 사용한다.
     // 내가 로그인 성공할때와 상대방이 채팅방에 진입했을때와 나갔을때 내려준다.
-    const chatRoomUserSize = _ROOMS[room].length;
-    const loginSuccessData = { room, nickName, chatRoomUserSize };
+    const chatRoomAllUsers = _ROOMS[room].map(r => r.nickName);
+    const loginSuccessData = { room, nickName, chatRoomAllUsers };
 
     // 현재 화상채팅은 2명만 맺어지므로 2번째 인원이 들어왔을때 반대편 화상채팅 인원의 닉네임을 넣어준다.
-    if (chatRoomUserSize === 2) {
+    if (chatRoomAllUsers.length === 2) {
         const otherUserData = _ROOMS[room].find(r => r.nickName !== nickName);
         loginSuccessData.otherNickName = otherUserData.nickName;
     }
@@ -103,6 +103,6 @@ function onLogin(socket, nickName, room) {
 
     socket.broadcast.to(room).emit('newUserLogin', {
         nickName,
-        chatRoomUserSize
+        chatRoomAllUsers
     });
 }

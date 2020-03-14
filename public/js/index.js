@@ -37,9 +37,9 @@ var SocketRoutes = {
         this._onRoutes();
     },
     _onRoutes: function () {
-        this._socket.on('loginSuccess', this._onLoginSuccess);
+        this._socket.on('loginSuccess', $.proxy(this._onLoginSuccess, this));
         this._socket.on('newUserLogin', $.proxy(this._onNewUserLogin, this));
-        this._socket.on('userLeft', this._onUserLeft);
+        this._socket.on('userLeft', $.proxy(this._onUserLeft, this));
         this._socket.on('receiveMessage', this._onReceiveMessage);
         this._socket.on('offerMade', $.proxy(this._onOfferMade, this));
         this._socket.on('answerMade', $.proxy(this._onAnswerMade, this));
@@ -54,7 +54,8 @@ var SocketRoutes = {
             makeChatMessage('SYSTEM', data.nickName + '님이 퇴장하셨습니다.');
         $("#chatArea").append(chatMessage);
 
-        $('#currentChatUserSize').text(data.chatRoomUserSize);
+        $('#currentChatUserSize').text(data.chatRoomAllUsers.length);
+        this._clearAndAddUserList(data.chatRoomAllUsers);
 
         var remoteVideo = $('#remoteVideo').get(0);
         remoteVideo.pause();
@@ -64,7 +65,8 @@ var SocketRoutes = {
         var chatMessage =
             makeChatMessage('SYSTEM', data.nickName + '님이 입장하셨습니다.');
         $("#chatArea").append(chatMessage);
-        $('#currentChatUserSize').text(data.chatRoomUserSize);
+        $('#currentChatUserSize').text(data.chatRoomAllUsers.length);
+        this._clearAndAddUserList(data.chatRoomAllUsers);
 
         // 두명의 인원만 화상채팅을 지원하므로 2명일때만 호출한다.
         if (data.userSize === 2) {
@@ -129,12 +131,22 @@ var SocketRoutes = {
         $("#conferenceRow").show();
         $("#infoRow").show();
         $("#chatRow").show();
+        $('#userListRow').show();
 
         $('#loggedUserName').text(data.nickName);
         $('#roomName').text(data.room);
-        $('#currentChatUserSize').text(data.chatRoomUserSize);
+        $('#currentChatUserSize').text(data.chatRoomAllUsers.length);
+        this._clearAndAddUserList(data.chatRoomAllUsers);
         if (data.otherNickName) {
             $('#otherUser').text(data.otherNickName);
+        }
+    },
+    _clearAndAddUserList: function (userList) {
+        $('#userList > li:gt(0)').remove();
+
+        var $userList = $('#userList');
+        for (var i = 0; i < userList.length; i++) {
+            $userList.append('<li class="list-group-item">'+ userList[i] +'</li>');
         }
     },
     emit: function (name, data) {

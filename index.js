@@ -6,10 +6,13 @@ const SocketRoutesConfig = require('./config/SocketRoutesConfig');
 
 const app = express();
 app.use(express.static('public'));
-app.use(express.static(path.join(__dirname, './views')));
 
 app.get('/', (request, response) => {
-    response.sendFile('index.html');
+    response.sendFile('./views/index.html', { root: __dirname });
+});
+
+app.get('/monitoring', (request, response) => {
+    response.sendFile('./views/monitoring.html', { root: __dirname });
 });
 
 const httpServer = http.createServer(app);

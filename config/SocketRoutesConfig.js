@@ -13,6 +13,20 @@ const _ROOMS = {};
  */
 const _CLIENTS = {};
 
+/**
+ * 모니터링과 관련된 socket id들을 저장한다.
+ * @type {*[]}
+ * @private
+ */
+const _MONITORING_SOCKETS = [];
+
+/**
+ * 일반 채팅방과 겹치지 않도록 채팅방 명을 난해하게 설정한다.
+ * @type {string}
+ * @private
+ */
+const _MONITORING_ROOM_NAME = '!!__MONITORING__!!';
+
 exports.init = clientSocket => {
 
     clientSocket.on('login', data => {
@@ -20,7 +34,11 @@ exports.init = clientSocket => {
     });
 
     clientSocket.on('disconnect', function () {
-        onDisconnect(clientSocket);
+        if (_MONITORING_SOCKETS.includes(clientSocket.id)) {
+            onMonitoringDisconnect(clientSocket);
+        } else {
+            onDisconnect(clientSocket);
+        }
     });
 
     clientSocket.on('sendMessage', function (data) {
@@ -33,6 +51,10 @@ exports.init = clientSocket => {
 
     clientSocket.on('makeAnswer', function (data) {
         onAnswerMade(clientSocket, data.answer);
+    });
+
+    clientSocket.on('registerMonitoringSocket', function (data) {
+        onRegisterMonitoringSocket(clientSocket);
     });
 };
 
@@ -74,11 +96,30 @@ function onDisconnect (socket) {
         room.splice(room.indexOf(roomInfo), 1);
     }
 
+    // 방에 아무도 없으면 해당 방정보는 없앤다. (모니터리에 0으로 계속뜸)
+    if (_ROOMS[clientData.room].length === 0) {
+        delete _ROOMS[clientData.room];
+    }
+
     socket.leave(roomId);
     socket.broadcast.to(roomId).emit('userLeft', {
         nickName: clientData.nickName,
         chatRoomAllUsers: room.map(r => r.nickName)
     });
+
+    socket.broadcast.to(_MONITORING_ROOM_NAME).emit('userLeft', {
+        roomName: roomId,
+        nickName: clientData.nickName
+    });
+}
+
+function onMonitoringDisconnect(socket) {
+    const index = _MONITORING_SOCKETS.indexOf(socket.id);
+    if (index > -1) {
+        _MONITORING_SOCKETS.splice(index, 1);
+        socket.leave(_MONITORING_ROOM_NAME);
+    }
+    console.log('LEAVE _MONITORING_SOCKETS :: ', _MONITORING_SOCKETS);
 }
 
 function onLogin(socket, nickName, room) {
@@ -105,4 +146,20 @@ function onLogin(socket, nickName, room) {
         nickName,
         chatRoomAllUsers
     });
+
+    socket.broadcast.to(_MONITORING_ROOM_NAME).emit('newUser', {
+        roomName: room, nickName
+    })
+}
+
+/**
+ * 모니터링 페이지에 접속한 소켓들 정보를 등록한다.
+ * @param socket 클라이언트 소켓정보
+ */
+function onRegisterMonitoringSocket(socket) {
+    if (!_MONITORING_SOCKETS.includes(socket.id)) {
+        _MONITORING_SOCKETS.push(socket.id);
+    }
+    socket.join(_MONITORING_ROOM_NAME);
+    socket.emit('successRegisterMonitoringSocket', _ROOMS);
 }

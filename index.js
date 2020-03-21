@@ -27,3 +27,4 @@ io.on('connection', socket => {
     console.log('socket on connection socket :: ', socket.id);
     SocketRoutesConfig.init(socket);
 });
+

@@ -12,6 +12,11 @@ var peerConnection = new RTCPeerConnection({
             credential: 'homeo',
             username: 'homeo'
         }
+        // {
+        //     urls: 'turn:numb.viagenie.ca',
+        //     credential: 'muazkh',
+        //     username: 'webrtc@live.com'
+        // },
     ]
 });
 
@@ -69,7 +74,8 @@ var SocketRoutes = {
         this._clearAndAddUserList(data.chatRoomAllUsers);
 
         // 두명의 인원만 화상채팅을 지원하므로 2명일때만 호출한다.
-        if (data.userSize === 2) {
+        console.log('data.userSize :: ', data.chatRoomAllUsers.length);
+        if (data.chatRoomAllUsers.length === 2) {
             $('#otherUser').text(data.nickName);
             this._callUser();
         }

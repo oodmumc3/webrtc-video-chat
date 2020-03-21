@@ -7,16 +7,16 @@ var peerConnection = new RTCPeerConnection({
         {
             'urls': 'stun:stun.l.google.com:19302?transport=tcp'
         },
-        {
-            urls: ['turn:turn.bistri.com:80'],
-            credential: 'homeo',
-            username: 'homeo'
-        }
         // {
-        //     urls: 'turn:numb.viagenie.ca',
-        //     credential: 'muazkh',
-        //     username: 'webrtc@live.com'
-        // },
+        //     urls: ['turn:turn.bistri.com:80'],
+        //     credential: 'homeo',
+        //     username: 'homeo'
+        // }
+        {
+            urls: 'turn:numb.viagenie.ca',
+            credential: 'muazkh',
+            username: 'webrtc@live.com'
+        },
     ]
 });
 
